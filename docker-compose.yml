@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  joke_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - monitoring_net
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring_net
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring_net
+
+networks:
+  monitoring_net:
+    driver: bridge
